@@ -1,24 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.scss";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { ClerkProvider } from "@clerk/clerk-react";
+
+import Home from "./pages/Home";
+import FAQ from "./pages/Faq";
+import Login from "./pages/Login";
+
+if (!process.env.REACT_APP_CLERK_PUBLISHABLE_KEY) {
+  throw new Error("Missing Publishable Key");
+}
+const clerkPubKey = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY;
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Home />,
+  },
+  {
+    path: "/sign-in",
+    element: <Login />,
+  },
+  {
+    path: "/faq",
+    element: <FAQ />,
+  },
+]);
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ClerkProvider publishableKey={clerkPubKey}>
+      <div className="App">
+        <RouterProvider router={router} />
+      </div>
+    </ClerkProvider>
   );
 }
 
